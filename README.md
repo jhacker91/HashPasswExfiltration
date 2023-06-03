@@ -5,7 +5,7 @@ Upload mimika-whid-jhackers(nodel).txt on whid injector and enjoy.
 
 
 Video-Spiegazione:
-
+https://youtu.be/6dvMlen-WgQ
 
 Whid-Injector:
 https://github.com/whid-injector/WHID
